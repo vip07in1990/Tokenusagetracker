@@ -1,0 +1,5 @@
+curl -v -x http://USER:PASSWORD@PROXY_HOST:PROXY_PORT \
+  https://models.github.ai/inference/chat/completions \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"openai/gpt-4.1","messages":[{"role":"user","content":"hello"}]}'
