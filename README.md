@@ -1,0 +1,2 @@
+# Tokenusagetracker
+Track ai usage
