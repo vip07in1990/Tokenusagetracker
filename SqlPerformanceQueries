@@ -1,0 +1,59 @@
+SELECT TOP 1
+record_id,
+SQLProcessUtilization AS SQL_CPU,
+SystemIdle,
+100 - SystemIdle - SQLProcessUtilization AS Other_CPU
+FROM (
+    SELECT
+        record.value('(./Record/@id)[1]', 'int') AS record_id,
+        record.value('(./Record/SchedulerMonitorEvent/SystemHealth/SystemIdle)[1]', 'int') AS SystemIdle,
+        record.value('(./Record/SchedulerMonitorEvent/SystemHealth/ProcessUtilization)[1]', 'int') AS SQLProcessUtilization
+    FROM (
+        SELECT CAST(record AS XML) record
+        FROM sys.dm_os_ring_buffers
+        WHERE ring_buffer_type = 'RING_BUFFER_SCHEDULER_MONITOR'
+    ) x
+) y
+ORDER BY record_id DESC;
+
+
+
+
+SELECT
+scheduler_id,
+cpu_id,
+status,
+current_tasks_count,
+runnable_tasks_count,
+active_workers_count
+FROM sys.dm_os_schedulers
+WHERE scheduler_id < 255;
+
+
+
+DBCC SQLPERF('sys.dm_os_wait_stats', CLEAR);
+
+
+SELECT TOP 20
+wait_type,
+wait_time_ms
+FROM sys.dm_os_wait_stats
+ORDER BY wait_time_ms DESC;
+
+
+
+SELECT
+r.session_id,
+r.cpu_time,
+r.total_elapsed_time,
+r.logical_reads,
+r.reads,
+r.writes,
+t.text
+FROM sys.dm_exec_requests r
+CROSS APPLY sys.dm_exec_sql_text(r.sql_handle) t
+WHERE r.session_id > 50;
+
+
+
+
