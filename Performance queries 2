@@ -1,0 +1,34 @@
+SELECT
+    r.session_id,
+    r.blocking_session_id,
+    r.wait_type,
+    r.wait_time,
+    r.cpu_time,
+    r.total_elapsed_time,
+    DB_NAME(r.database_id) AS database_name,
+    t.text
+FROM sys.dm_exec_requests r
+CROSS APPLY sys.dm_exec_sql_text(r.sql_handle) t
+WHERE r.blocking_session_id <> 0;
+
+
+WITH Waits AS
+(
+    SELECT
+        wait_type,
+        wait_time_ms / 1000.0 AS wait_s
+    FROM sys.dm_os_wait_stats
+    WHERE wait_type NOT LIKE '%SLEEP%'
+      AND wait_type NOT IN
+      (
+          'CLR_AUTO_EVENT',
+          'LAZYWRITER_SLEEP',
+          'XE_TIMER_EVENT',
+          'REQUEST_FOR_DEADLOCK_SEARCH',
+          'DIRTY_PAGE_POLL',
+          'CHECKPOINT_QUEUE'
+      )
+)
+SELECT TOP 20 *
+FROM Waits
+ORDER BY wait_s DESC;
