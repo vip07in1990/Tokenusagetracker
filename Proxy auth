@@ -1,0 +1,13 @@
+Authenticator proxyAuthenticator = (route, response) -> {
+    String credential = Credentials.basic("USER", "PASSWORD");
+    return response.request().newBuilder()
+            .header("Proxy-Authorization", credential)
+            .build();
+};
+
+OkHttpClient client = new OkHttpClient.Builder()
+        .proxy(new Proxy(
+                Proxy.Type.HTTP,
+                new InetSocketAddress("PROXY_HOST", PROXY_PORT)))
+        .proxyAuthenticator(proxyAuthenticator)
+        .build();
