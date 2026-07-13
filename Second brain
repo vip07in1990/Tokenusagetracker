@@ -1,0 +1,69 @@
+second-brain/
+│
+├── 00-system/
+│   ├── principles/          <- Cole Medin concepts (PIV Loop, Context Engineering)
+│   ├── prompting/
+│   ├── workflows/
+│   └── coding-rules/
+│
+├── 01-domain/
+│   ├── asset-management/
+│   ├── trade/
+│   ├── orders/
+│   ├── allocation/
+│   ├── positions/
+│   └── security-master/
+│
+├── 02-architecture/
+│   ├── kafka/
+│   ├── snowflake/
+│   ├── sql-server/
+│   ├── data-vault/
+│   ├── streamsets/
+│   └── terraform/
+│
+├── 03-services/
+│   ├── trade-service/
+│   ├── order-service/
+│   ├── allocation-service/
+│   └── ...
+│
+├── 04-patterns/
+│   ├── retry/
+│   ├── idempotency/
+│   ├── tracing/
+│   ├── observability/
+│   ├── performance/
+│   └── security/
+│
+├── 05-decisions/
+│   ├── ADR-001.md
+│   ├── ADR-002.md
+│   └── ...
+│
+├── 06-incidents/
+│   ├── kafka-lag.md
+│   ├── sql-performance.md
+│   ├── aoag-tls.md
+│   └── ...
+│
+├── 07-prompts/
+│   ├── review-pr.md
+│   ├── create-feature.md
+│   ├── debug.md
+│   ├── optimize.md
+│   └── migrate.md
+│
+├── 08-research/
+│   ├── snowflake/
+│   ├── springboot/
+│   ├── java/
+│   └── ai/
+│
+├── 09-memory/
+│   ├── state.db
+│   ├── summaries/
+│   ├── lessons/
+│   └── conversation-index.md
+│
+└── index.md
