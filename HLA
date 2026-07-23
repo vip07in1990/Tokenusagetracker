@@ -1,0 +1,78 @@
+@startuml
+title Storefront DaaS - High Level Solution Architecture
+
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+actor "Business User" as User
+
+package "Enterprise Access Layer" {
+
+component "dWeb\n(Apache Reverse Proxy)" as DWEB
+component "CIDP\n(OpenID Connect)" as CIDP
+
+}
+
+package "Storefront Platform" {
+
+component "Storefront UI\n(React)" as UI
+component "Storefront Service\n(Spring Boot)" as SERVICE
+component "Authorisation\nService" as AUTH
+component "DaaS Catalogue\nService" as CATALOG
+
+}
+
+package "Integration Layer" {
+
+component "API Proxy" as APIPROXY
+component "Translation Layer" as TRANS
+
+}
+
+package "Enterprise Data Services" {
+
+component "FX Service"
+component "Currency Service"
+component "Reference Data Services"
+component "Trade Services"
+
+}
+
+database "Denodo" as DENODO
+
+queue Kafka
+
+cloud Eureka
+
+User --> DWEB : HTTPS
+
+DWEB --> CIDP : OIDC Authentication
+CIDP --> DWEB : JWT / User Claims
+
+DWEB --> UI : Serve React Application
+
+UI --> SERVICE : REST / HTTPS
+
+SERVICE --> AUTH : Validate User\nPermissions
+
+SERVICE --> CATALOG : Retrieve Service Index
+
+CATALOG --> SERVICE : Services + Metadata
+
+SERVICE --> Kafka
+
+SERVICE --> Eureka
+
+UI --> APIPROXY : Execute API
+
+APIPROXY --> TRANS
+
+TRANS --> "FX Service"
+TRANS --> "Currency Service"
+TRANS --> "Reference Data Services"
+TRANS --> "Trade Services"
+
+APIPROXY --> DENODO
+
+@enduml
