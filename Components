@@ -1,0 +1,64 @@
+@startuml
+title Storefront Internal Components
+
+left to right direction
+
+package "Frontend" {
+
+component "React UI"
+
+component "Redux Store"
+
+component "API Test"
+
+component "Data Services"
+
+component "Translation Layer"
+
+}
+
+package "Backend" {
+
+component "Storefront Service"
+
+component "Authorisation"
+
+component "Catalogue"
+
+}
+
+package "Enterprise Services" {
+
+component "API Proxy"
+
+component "Denodo"
+
+component "Kafka"
+
+component "Eureka"
+
+}
+
+"React UI" --> "Redux Store"
+
+"React UI" --> "Data Services"
+
+"React UI" --> "API Test"
+
+"API Test" --> "Translation Layer"
+
+"Data Services" --> "Storefront Service"
+
+"Storefront Service" --> "Authorisation"
+
+"Storefront Service" --> "Catalogue"
+
+"Storefront Service" --> Kafka
+
+"Storefront Service" --> Eureka
+
+"Translation Layer" --> "API Proxy"
+
+"API Proxy" --> Denodo
+
+@enduml
