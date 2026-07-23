@@ -1,0 +1,56 @@
+@startuml
+title Storefront Authentication and Data Exploration Flow
+
+actor User
+
+participant Browser
+participant "dWeb\nApache" as DWEB
+participant CIDP
+participant "Storefront UI" as UI
+participant "Storefront Service" as SERVICE
+participant "Authorisation\nService" as AUTH
+participant "DaaS Catalogue" as CAT
+participant "API Proxy" as API
+participant "Denodo / Data Service" as DATA
+
+User -> Browser : Open Storefront URL
+
+Browser -> DWEB : HTTPS Request
+
+DWEB -> CIDP : Redirect for Login
+
+CIDP --> User : Login + MFA
+
+User --> CIDP : Credentials
+
+CIDP --> DWEB : ID Token / Access Token
+
+DWEB --> Browser : Session Cookie
+
+Browser -> UI : Load React Application
+
+UI -> SERVICE : Get Services
+
+SERVICE -> AUTH : Validate User
+
+AUTH --> SERVICE : Permissions
+
+SERVICE -> CAT : Fetch Service Index
+
+CAT --> SERVICE : Metadata
+
+SERVICE --> UI : Service Catalogue
+
+User -> UI : Select API
+
+UI -> API : Execute API
+
+API -> DATA : REST Call
+
+DATA --> API : Response
+
+API --> UI : Normalised JSON
+
+UI --> User : Display Data
+
+@enduml
