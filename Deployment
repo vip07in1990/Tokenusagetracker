@@ -1,0 +1,78 @@
+@startuml
+title Storefront Deployment Architecture
+
+skinparam componentStyle rectangle
+
+actor User
+
+node "User Browser" {
+
+component Browser
+
+}
+
+node "dWeb Platform" {
+
+component "Apache 2.4\nReverse Proxy" as Apache
+
+component "OIDC Module"
+
+component "Load Balancer"
+
+}
+
+cloud CIDP
+
+node "OpenShift Cluster A" {
+
+component "storefront-ui\nPod"
+
+}
+
+node "OpenShift Cluster B" {
+
+component "storefront-ui\nPod"
+
+}
+
+node "Backend Services" {
+
+component "Storefront Service"
+
+component "DaaS Catalogue"
+
+component "API Proxy"
+
+component "Authorisation"
+
+database Denodo
+
+queue Kafka
+
+}
+
+Browser --> Apache
+
+Apache --> "OIDC Module"
+
+"OIDC Module" --> CIDP
+
+Apache --> "Load Balancer"
+
+"Load Balancer" --> "storefront-ui\nPod"
+
+"Load Balancer" --> "storefront-ui\nPod"
+
+"storefront-ui\nPod" --> "Storefront Service"
+
+"Storefront Service" --> "Authorisation"
+
+"Storefront Service" --> "DaaS Catalogue"
+
+"Storefront Service" --> "API Proxy"
+
+"API Proxy" --> Denodo
+
+"Storefront Service" --> Kafka
+
+@enduml
